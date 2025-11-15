@@ -103,6 +103,10 @@ function setup_app() {
     print_info "Running migrations with seeders..."
     docker-compose -f $DEV_COMPOSE exec backend php artisan migrate --seed
     print_success "Database migrated and seeded"
+
+    print_info "Running SWAPI synchronization..."
+    docker-compose -f $DEV_COMPOSE exec backend php artisan sync-swapi
+    print_success "SWAPI synchronization completed"
     
     print_success "Setup complete!"
     print_info "Backend: http://localhost:8000"
