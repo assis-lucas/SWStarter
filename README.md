@@ -4,122 +4,66 @@ A full-stack starter template with Laravel backend and React frontend, fully con
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- [Docker](https://www.docker.com/get-started) and Docker Compose
-- Git
+**Prerequisites:** Docker and Docker Compose
 
-### Setup
+### Automated Setup (Recommended)
 
-1. **Configure Laravel environment:**
-   ```bash
-   cp backend/.env.example backend/.env
-   ```
+```bash
+./sw setup
+```
 
-2. **Generate Laravel application key:**
-   ```bash
-   docker-compose up backend -d
-   docker exec -it $(docker-compose ps -q backend) php artisan key:generate
-   docker-compose down
-   ```
+This will:
+- Copy `.env.example` to `.env`
+- Build and start containers
+- Install dependencies
+- Generate application key
+- Run migrations with seeders
 
-3. **Start the application:**
-   ```bash
-   # Production mode
-   docker-compose up -d
-   
-   # OR Development mode (with hot reload)
-   docker-compose -f docker-compose.dev.yaml up -d
-   ```
+### Manual Setup
 
-4. **Run database migrations:**
-   ```bash
-   docker exec -it $(docker-compose ps -q backend) php artisan migrate
-   ```
+```bash
+# 1. Copy environment file
+cp backend/.env.example backend/.env
+
+# 2. Build and start containers
+docker-compose -f docker-compose.dev.yaml build
+docker-compose -f docker-compose.dev.yaml up -d
+
+# 3. Install dependencies and setup
+docker-compose -f docker-compose.dev.yaml exec backend composer install
+docker-compose -f docker-compose.dev.yaml exec backend php artisan key:generate
+docker-compose -f docker-compose.dev.yaml exec backend php artisan migrate --seed
+```
 
 ### Access the Application
 
-- **Frontend (React)**: http://localhost:3000
-- **Backend (Laravel API)**: http://localhost:8000
-- **Database (MySQL)**: localhost:3306
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
+- **Database**: localhost:3306 (user: `laravel`, password: `password`)
 
-## 🛠️ Development
+## 🛠️ CLI Tool
 
-### Development Mode
+Use the `sw` command for all operations:
+
 ```bash
-# Start with hot reload for frontend
-docker-compose -f docker-compose.dev.yaml up -d
+./sw dev              # Start development mode (with hot reload)
+./sw up               # Start production mode
+./sw stop             # Stop all containers
 
-# View logs
-docker-compose logs -f frontend-dev
-docker-compose logs -f backend
+./sw artisan <cmd>    # Run Laravel commands
+./sw composer <cmd>   # Run Composer commands
+./sw npm <cmd>        # Run npm commands
+
+./sw migrate          # Run migrations
+./sw sql              # Open MySQL CLI
+./sw bash backend     # Access backend container
+
+./sw help             # Show all commands
 ```
 
-### Useful Commands
+## 📦 Tech Stack
 
-**Laravel (Backend):**
-```bash
-# Run migrations
-docker exec -it $(docker-compose ps -q backend) php artisan migrate
-
-# Create new migration
-docker exec -it $(docker-compose ps -q backend) php artisan make:migration create_example_table
-
-# Laravel Tinker (REPL)
-docker exec -it $(docker-compose ps -q backend) php artisan tinker
-
-# Install PHP packages
-docker exec -it $(docker-compose ps -q backend) composer install
-```
-
-**React (Frontend):**
-```bash
-# Install npm packages (development mode)
-docker exec -it $(docker-compose ps -q frontend-dev) npm install
-
-# Run tests
-docker exec -it $(docker-compose ps -q frontend-dev) npm test
-```
-
-**Database:**
-```bash
-# Access MySQL
-docker exec -it $(docker-compose ps -q mysql) mysql -u laravel -p laravel
-
-# Reset database
-docker-compose down
-docker volume rm swstarter_mysql_data
-docker-compose up -d
-```
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-**Port already in use:**
-```bash
-# Check what's using the port
-netstat -tulpn | grep :3000
-# Kill the process or change port in docker-compose.yaml
-```
-
-**Database connection issues:**
-```bash
-# Ensure MySQL is healthy
-docker-compose ps
-# Check backend logs
-docker-compose logs backend
-```
-
-**Frontend not updating:**
-```bash
-# Use development compose file
-docker-compose -f docker-compose.dev.yaml up -d
-```
-
-**Permission issues:**
-```bash
-# Fix file permissions
-sudo chown -R $USER:$USER .
-```
-
-For more detailed Docker setup information, see the individual application README files in `frontend/` and `backend/` directories.
+- **Backend**: Laravel 12, PHP 8.4
+- **Frontend**: React 19, Vite
+- **Database**: MySQL 8.0
+- **Container**: Docker with Alpine Linux
