@@ -153,9 +153,9 @@ function stop_all() {
 function run_artisan() {
     # Check which compose file is running
     if docker-compose -f $DEV_COMPOSE ps backend | grep -qE "Up|running"; then
-        docker-compose -f $DEV_COMPOSE exec backend php artisan "$@"
+        docker-compose -f $DEV_COMPOSE exec -u www-data backend php artisan "$@"
     elif docker-compose -f $NORMAL_COMPOSE ps backend | grep -qE "Up|running"; then
-        docker-compose -f $NORMAL_COMPOSE exec backend php artisan "$@"
+        docker-compose -f $NORMAL_COMPOSE exec -u www-data backend php artisan "$@"
     else
         print_error "No backend container running. Start with 'sw dev' or 'sw up'"
         exit 1

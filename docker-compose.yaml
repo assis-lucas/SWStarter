@@ -15,6 +15,9 @@ services:
     build:
       context: ./backend
       dockerfile: docker/Dockerfile
+      args:
+        WWWGROUP: '1000'
+        WWWUSER: '1000'
     env_file:
       - ./backend/.env
     ports:
