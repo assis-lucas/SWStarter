@@ -5,4 +5,6 @@ CREATE DATABASE IF NOT EXISTS testing;
 -- Create a test user
 CREATE USER IF NOT EXISTS 'laravel'@'%' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON laravel.* TO 'laravel'@'%';
+GRANT ALL PRIVILEGES ON testing.* TO 'laravel'@'%';
+GRANT ALL PRIVILEGES ON `laravel_test_%`.* TO 'laravel'@'%';
 FLUSH PRIVILEGES;
