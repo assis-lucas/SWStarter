@@ -209,7 +209,6 @@ class SyncSwapiTest extends TestCase
             'terrain' => 'grasslands',
             'surface_water' => '40',
             'population' => '1000000',
-            'url' => 'https://swapi.dev/api/planets/99999/',
         ]);
 
         $this->assertTrue(Planet::where('swapi_id', 99999)->exists());

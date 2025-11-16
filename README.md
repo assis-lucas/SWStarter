@@ -26,19 +26,20 @@ This will:
 cp backend/.env.example backend/.env
 
 # 2. Build and start containers
-docker-compose -f docker-compose.dev.yaml build
-docker-compose -f docker-compose.dev.yaml up -d
+docker compose -f docker-compose.dev.yaml build
+docker compose -f docker-compose.dev.yaml up -d
 
 # 3. Install dependencies and setup
-docker-compose -f docker-compose.dev.yaml exec backend composer install
-docker-compose -f docker-compose.dev.yaml exec backend php artisan key:generate
-docker-compose -f docker-compose.dev.yaml exec backend php artisan migrate --seed
+docker compose -f docker-compose.dev.yaml exec backend composer install
+docker compose -f docker-compose.dev.yaml exec backend php artisan key:generate
+docker compose -f docker-compose.dev.yaml exec backend php artisan migrate --seed
 ```
 
 ### Access the Application
 
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
+- **Stats**: http://localhost:8000/stats
 - **Database**: localhost:3306 (user: `laravel`, password: `password`)
 
 ## 🛠️ CLI Tool
@@ -66,4 +67,5 @@ Use the `sw` command for all operations:
 - **Backend**: Laravel 12, PHP 8.4
 - **Frontend**: React 19, Vite
 - **Database**: MySQL 8.0
+- **Caching**: Redis
 - **Container**: Docker with Alpine Linux
