@@ -1,12 +1,3 @@
-FROM composer:2.7 AS composer
-
-WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --optimize-autoloader
-
-COPY . .
-RUN composer dump-autoload --optimize --classmap-authoritative
-
 FROM php:8.4-fpm-alpine
 
 ARG WWWGROUP=1000
@@ -23,6 +14,7 @@ RUN apk add --no-cache \
     bash \
     netcat-openbsd \
     shadow \
+    curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo_mysql \
@@ -31,12 +23,15 @@ RUN apk add --no-cache \
         pcntl \
         bcmath \
         gd \
-        zip
+        zip \
+    && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
 RUN groupmod -o -g ${WWWGROUP} www-data \
     && usermod -o -u ${WWWUSER} -g www-data www-data
 
-COPY --from=composer --chown=www-data:www-data /app /var/www/html
+WORKDIR /var/www/html
+
+COPY . /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
@@ -52,8 +47,6 @@ COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
-
-WORKDIR /var/www/html
 
 EXPOSE 80
 

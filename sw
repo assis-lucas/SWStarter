@@ -77,12 +77,12 @@ function setup_app() {
     
     # Build containers in dev mode
     print_info "Building containers in dev mode..."
-    docker-compose -f $DEV_COMPOSE build
+    docker compose -f $DEV_COMPOSE build
     print_success "Containers built"
     
     # Start containers
     print_info "Starting containers..."
-    docker-compose -f $DEV_COMPOSE up -d
+    docker compose -f $DEV_COMPOSE up -d
     print_success "Containers started"
     
     # Wait for MySQL to be ready
@@ -91,21 +91,21 @@ function setup_app() {
     
     # Install composer dependencies
     print_info "Installing composer dependencies..."
-    docker-compose -f $DEV_COMPOSE exec backend composer install
+    docker compose -f $DEV_COMPOSE exec backend composer install
     print_success "Composer dependencies installed"
     
     # Generate app key
     print_info "Generating application key..."
-    docker-compose -f $DEV_COMPOSE exec backend php artisan key:generate
+    docker compose -f $DEV_COMPOSE exec backend php artisan key:generate
     print_success "Application key generated"
     
     # Run migrations with seeders
     print_info "Running migrations with seeders..."
-    docker-compose -f $DEV_COMPOSE exec backend php artisan migrate --seed
+    docker compose -f $DEV_COMPOSE exec backend php artisan migrate --seed
     print_success "Database migrated and seeded"
 
     print_info "Running SWAPI synchronization..."
-    docker-compose -f $DEV_COMPOSE exec backend php artisan sync-swapi
+    docker compose -f $DEV_COMPOSE exec backend php artisan sync-swapi
     print_success "SWAPI synchronization completed"
     
     print_success "Setup complete!"
@@ -117,13 +117,13 @@ function dev_mode() {
     print_info "Starting development mode with hot reload..."
     
     # Stop normal mode if running
-    if docker-compose -f $NORMAL_COMPOSE ps 2>/dev/null | grep -qE "Up|running"; then
+    if docker compose -f $NORMAL_COMPOSE ps 2>/dev/null | grep -qE "Up|running"; then
         print_info "Stopping production mode..."
-        docker-compose -f $NORMAL_COMPOSE down
+        docker compose -f $NORMAL_COMPOSE down
     fi
     
     # Start dev mode
-    docker-compose -f $DEV_COMPOSE up -d
+    docker compose -f $DEV_COMPOSE up -d
     print_success "Development mode started"
     print_info "Backend: http://localhost:8000"
     print_info "Frontend: http://localhost:3000 (with hot reload)"
@@ -133,13 +133,13 @@ function up_mode() {
     print_info "Starting production mode..."
     
     # Stop dev mode if running
-    if docker-compose -f $DEV_COMPOSE ps 2>/dev/null | grep -qE "Up|running"; then
+    if docker compose -f $DEV_COMPOSE ps 2>/dev/null | grep -qE "Up|running"; then
         print_info "Stopping development mode..."
-        docker-compose -f $DEV_COMPOSE down
+        docker compose -f $DEV_COMPOSE down
     fi
     
     # Start normal mode
-    docker-compose -f $NORMAL_COMPOSE up -d
+    docker compose -f $NORMAL_COMPOSE up -d
     print_success "Production mode started"
     print_info "Backend: http://localhost:8000"
     print_info "Frontend: http://localhost:3000"
@@ -148,18 +148,18 @@ function up_mode() {
 function stop_all() {
     print_info "Stopping all containers..."
     
-    docker-compose -f $DEV_COMPOSE down 2>/dev/null || true
-    docker-compose -f $NORMAL_COMPOSE down 2>/dev/null || true
+    docker compose -f $DEV_COMPOSE down 2>/dev/null || true
+    docker compose -f $NORMAL_COMPOSE down 2>/dev/null || true
     
     print_success "All containers stopped"
 }
 
 function run_artisan() {
     # Check which compose file is running
-    if docker-compose -f $DEV_COMPOSE ps backend | grep -qE "Up|running"; then
-        docker-compose -f $DEV_COMPOSE exec -u www-data backend php artisan "$@"
-    elif docker-compose -f $NORMAL_COMPOSE ps backend | grep -qE "Up|running"; then
-        docker-compose -f $NORMAL_COMPOSE exec -u www-data backend php artisan "$@"
+    if docker compose -f $DEV_COMPOSE ps backend | grep -qE "Up|running"; then
+        docker compose -f $DEV_COMPOSE exec -u www-data backend php artisan "$@"
+    elif docker compose -f $NORMAL_COMPOSE ps backend | grep -qE "Up|running"; then
+        docker compose -f $NORMAL_COMPOSE exec -u www-data backend php artisan "$@"
     else
         print_error "No backend container running. Start with 'sw dev' or 'sw up'"
         exit 1
@@ -167,16 +167,23 @@ function run_artisan() {
 }
 
 function run_composer() {
-    # Composer is not installed in the runtime container, so we use docker run with composer image
-    docker run --rm -v "$(pwd)/backend:/app" -w /app composer:2.7 composer "$@"
+    # Check which compose file is running
+    if docker compose -f $DEV_COMPOSE ps backend | grep -qE "Up|running"; then
+        docker compose -f $DEV_COMPOSE exec backend composer "$@"
+    elif docker compose -f $NORMAL_COMPOSE ps backend | grep -qE "Up|running"; then
+        docker compose -f $NORMAL_COMPOSE exec backend composer "$@"
+    else
+        print_error "No backend container running. Start with 'sw dev' or 'sw up'"
+        exit 1
+    fi
 }
 
 function run_npm() {
     # Check which compose file is running
-    if docker-compose -f $DEV_COMPOSE ps frontend-dev | grep -qE "Up|running"; then
-        docker-compose -f $DEV_COMPOSE exec frontend-dev npm "$@"
-    elif docker-compose -f $NORMAL_COMPOSE ps frontend | grep -qE "Up|running"; then
-        docker-compose -f $NORMAL_COMPOSE exec frontend npm "$@"
+    if docker compose -f $DEV_COMPOSE ps frontend-dev | grep -qE "Up|running"; then
+        docker compose -f $DEV_COMPOSE exec frontend-dev npm "$@"
+    elif docker compose -f $NORMAL_COMPOSE ps frontend | grep -qE "Up|running"; then
+        docker compose -f $NORMAL_COMPOSE exec frontend npm "$@"
     else
         print_error "No frontend container running. Start with 'sw dev' or 'sw up'"
         exit 1
@@ -196,10 +203,10 @@ function open_sql() {
     fi
     
     # Check which compose file is running
-    if docker-compose -f $DEV_COMPOSE ps mysql 2>/dev/null | grep -qE "Up|running"; then
-        docker-compose -f $DEV_COMPOSE exec mysql mysql -u"$DB_USERNAME" -p"$DB_PASSWORD" "$DB_DATABASE"
-    elif docker-compose -f $NORMAL_COMPOSE ps mysql 2>/dev/null | grep -qE "Up|running"; then
-        docker-compose -f $NORMAL_COMPOSE exec mysql mysql -u"$DB_USERNAME" -p"$DB_PASSWORD" "$DB_DATABASE"
+    if docker compose -f $DEV_COMPOSE ps mysql 2>/dev/null | grep -qE "Up|running"; then
+        docker compose -f $DEV_COMPOSE exec mysql mysql -u"$DB_USERNAME" -p"$DB_PASSWORD" "$DB_DATABASE"
+    elif docker compose -f $NORMAL_COMPOSE ps mysql 2>/dev/null | grep -qE "Up|running"; then
+        docker compose -f $NORMAL_COMPOSE exec mysql mysql -u"$DB_USERNAME" -p"$DB_PASSWORD" "$DB_DATABASE"
     else
         print_error "No MySQL container running. Start with 'sw dev' or 'sw up'"
         exit 1
@@ -221,7 +228,7 @@ function open_bash() {
             ;;
         frontend)
             # Check if dev or normal
-            if docker-compose -f $DEV_COMPOSE ps frontend-dev 2>/dev/null | grep -qE "Up|running"; then
+            if docker compose -f $DEV_COMPOSE ps frontend-dev 2>/dev/null | grep -qE "Up|running"; then
                 service="frontend-dev"
                 compose_file=$DEV_COMPOSE
             else
@@ -240,9 +247,9 @@ function open_bash() {
     
     # Determine which compose file to use if not already set
     if [ -z "$compose_file" ]; then
-        if docker-compose -f $DEV_COMPOSE ps $service 2>/dev/null | grep -qE "Up|running"; then
+        if docker compose -f $DEV_COMPOSE ps $service 2>/dev/null | grep -qE "Up|running"; then
             compose_file=$DEV_COMPOSE
-        elif docker-compose -f $NORMAL_COMPOSE ps $service 2>/dev/null | grep -qE "Up|running"; then
+        elif docker compose -f $NORMAL_COMPOSE ps $service 2>/dev/null | grep -qE "Up|running"; then
             compose_file=$NORMAL_COMPOSE
         else
             print_error "Container $container is not running. Start with 'sw dev' or 'sw up'"
@@ -250,7 +257,7 @@ function open_bash() {
         fi
     fi
     
-    docker-compose -f $compose_file exec $service /bin/bash
+    docker compose -f $compose_file exec $service /bin/bash
 }
 
 function run_migrate() {
