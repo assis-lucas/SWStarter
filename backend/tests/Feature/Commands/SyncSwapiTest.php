@@ -169,7 +169,7 @@ class SyncSwapiTest extends TestCase
 
     public function test_sync_swapi_command_syncs_all_entities(): void
     {
-        $this->artisan('sync-swapi')->assertSuccessful();
+        $this->artisan('sync:swapi')->assertSuccessful();
 
         $this->assertEquals(1, Film::count());
         $this->assertEquals(1, Person::count());
@@ -181,13 +181,13 @@ class SyncSwapiTest extends TestCase
 
     public function test_sync_swapi_command_does_not_duplicate_data(): void
     {
-        $this->artisan('sync-swapi')->assertSuccessful();
+        $this->artisan('sync:swapi')->assertSuccessful();
 
         $filmCount = Film::count();
         $peopleCount = Person::count();
         $planetCount = Planet::count();
 
-        $this->artisan('sync-swapi')->assertSuccessful();
+        $this->artisan('sync:swapi')->assertSuccessful();
 
         $this->assertEquals($filmCount, Film::count());
         $this->assertEquals($peopleCount, Person::count());
@@ -196,7 +196,7 @@ class SyncSwapiTest extends TestCase
 
     public function test_sync_swapi_command_deletes_orphaned_records(): void
     {
-        $this->artisan('sync-swapi')->assertSuccessful();
+        $this->artisan('sync:swapi')->assertSuccessful();
 
         Planet::create([
             'swapi_id' => 99999,
@@ -213,14 +213,14 @@ class SyncSwapiTest extends TestCase
 
         $this->assertTrue(Planet::where('swapi_id', 99999)->exists());
 
-        $this->artisan('sync-swapi')->assertSuccessful();
+        $this->artisan('sync:swapi')->assertSuccessful();
 
         $this->assertFalse(Planet::where('swapi_id', 99999)->exists());
     }
 
     public function test_sync_swapi_command_creates_relationships(): void
     {
-        $this->artisan('sync-swapi')->assertSuccessful();
+        $this->artisan('sync:swapi')->assertSuccessful();
 
         $film = Film::where('title', 'A New Hope')->first();
         $this->assertNotNull($film);

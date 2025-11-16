@@ -33,6 +33,7 @@ docker compose -f docker-compose.dev.yaml up -d
 docker compose -f docker-compose.dev.yaml exec backend composer install
 docker compose -f docker-compose.dev.yaml exec backend php artisan key:generate
 docker compose -f docker-compose.dev.yaml exec backend php artisan migrate --seed
+docker compose -f docker-compose.dev.yaml exec backend php artisan sync:swapi
 ```
 
 ### Access the Application

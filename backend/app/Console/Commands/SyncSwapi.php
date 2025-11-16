@@ -11,7 +11,7 @@ use App\Client\Swapi\Providers\EntityProvider;
 
 class SyncSwapi extends Command
 {
-    protected $signature = 'sync-swapi';
+    protected $signature = 'sync:swapi';
 
     protected $description = 'Synchronize all SWAPI data to the database';
 

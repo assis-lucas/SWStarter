@@ -105,7 +105,7 @@ function setup_app() {
     print_success "Database migrated and seeded"
 
     print_info "Running SWAPI synchronization..."
-    docker compose -f $DEV_COMPOSE exec backend php artisan sync-swapi
+    docker compose -f $DEV_COMPOSE exec backend php artisan sync:swapi
     print_success "SWAPI synchronization completed"
     
     print_success "Setup complete!"
