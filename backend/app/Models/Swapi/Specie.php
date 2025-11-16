@@ -2,12 +2,15 @@
 
 namespace App\Models\Swapi;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Specie extends Model
 {
+    use HasFactory;
+
     protected $table = 'swapi_species';
 
     protected $fillable = [

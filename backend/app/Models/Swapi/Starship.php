@@ -2,11 +2,14 @@
 
 namespace App\Models\Swapi;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Starship extends Model
 {
+    use HasFactory;
+
     protected $table = 'swapi_starships';
 
     protected $fillable = [

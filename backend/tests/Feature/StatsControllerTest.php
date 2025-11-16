@@ -15,7 +15,7 @@ class StatsControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         Cache::flush();
         QueryLog::query()->delete();
     }
@@ -76,7 +76,7 @@ class StatsControllerTest extends TestCase
     {
         $hour10 = now()->setHour(10)->setMinute(0)->setSecond(0);
         $hour14 = now()->setHour(14)->setMinute(0)->setSecond(0);
-        
+
         $this->insertQueryLog(['sql' => 'test1', 'duration_ms' => 10, 'created_at' => $hour10]);
         $this->insertQueryLog(['sql' => 'test2', 'duration_ms' => 10, 'created_at' => $hour10]);
         $this->insertQueryLog(['sql' => 'test3', 'duration_ms' => 10, 'created_at' => $hour14]);
