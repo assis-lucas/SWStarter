@@ -178,6 +178,17 @@ function run_composer() {
     fi
 }
 
+function run_pint() {
+    if docker compose -f $DEV_COMPOSE ps backend | grep -qE "Up|running"; then
+        docker compose -f $DEV_COMPOSE exec backend ./vendor/bin/pint
+    elif docker compose -f $NORMAL_COMPOSE ps backend | grep -qE "Up|running"; then
+        docker compose -f $NORMAL_COMPOSE exec backend ./vendor/bin/pint
+    else
+        print_error "No backend container running. Start with 'sw dev' or 'sw up'"
+        exit 1
+    fi
+}
+
 function run_npm() {
     # Check which compose file is running
     if docker compose -f $DEV_COMPOSE ps frontend-dev | grep -qE "Up|running"; then
@@ -293,6 +304,10 @@ case "${1:-}" in
     composer)
         shift
         run_composer "$@"
+        ;;
+    pint)
+        shift
+        run_pint
         ;;
     npm)
         shift
