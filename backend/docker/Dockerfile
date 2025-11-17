@@ -26,28 +26,21 @@ RUN apk add --no-cache \
         zip \
     && curl -sLS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
-RUN groupmod -o -g ${WWWGROUP} www-data \
+RUN set -x \
+    && groupmod -o -g ${WWWGROUP} www-data \
     && usermod -o -u ${WWWUSER} -g www-data www-data
 
 WORKDIR /var/www/html
 
-COPY . /var/www/html
-
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache \
-    && mkdir -p /var/www/html/storage/framework/views /run/php \
-    && chmod 775 /var/www/html/storage/framework/views \
-    && chown -R www-data:www-data /run/php
-
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p /run/php /var/www/html/storage /var/www/html/bootstrap/cache \
+    && mkdir -p /tmp/client_body /tmp/proxy /tmp/fastcgi /tmp/uwsgi /tmp/scgi \
+    && chown -R www-data:www-data /tmp/client_body /tmp/proxy /tmp/fastcgi /tmp/uwsgi /tmp/scgi
 
 EXPOSE 80
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
