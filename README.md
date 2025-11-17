@@ -40,7 +40,7 @@ docker compose -f docker-compose.dev.yaml exec backend php artisan sync:swapi
 
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
-- **Stats**: http://localhost:8000/stats
+- **Stats**: http://localhost:3000/stats – (endpoint http://localhost:8000/api/stats)
 - **Database**: localhost:3306 (user: `laravel`, password: `password`)
 
 ## 🛠️ CLI Tool

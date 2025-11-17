@@ -9,9 +9,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::get('/stats', StatsController::class)->name('stats');
 
 Route::prefix('api')->group(function () {
+    Route::get('/stats', StatsController::class)->name('api.stats');
+
     Route::get('/films', [FilmsController::class, 'index'])->name('films.index');
     Route::get('/films/{film}', [FilmsController::class, 'show'])->name('films.show');
 

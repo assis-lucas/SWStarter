@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import Search from './pages/Search';
 import PersonDetails from './pages/PersonDetails';
 import FilmDetails from './pages/FilmDetails';
+import Stats from './pages/Stats';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Search />} />
           <Route path="/person/:id" element={<PersonDetails />} />
           <Route path="/film/:id" element={<FilmDetails />} />
+          <Route path="/stats" element={<Stats />} />
         </Routes>
       </Layout>
       <ToastContainer

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ChartBarIcon } from '@heroicons/react/24/outline';
 
 const Layout = ({ children }) => {
   return (
@@ -8,6 +9,13 @@ const Layout = ({ children }) => {
           <div className="flex justify-center items-center h-16">
             <Link to="/" className="text-2xl font-bold text-primary-600 hover:text-primary-800 transition-colors">
               SWStarter
+            </Link>
+            <Link
+              to="/stats"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-lg transition-colors"
+            >
+              <ChartBarIcon className="w-5 h-5" />
+              <span>Statistics</span>
             </Link>
           </div>
         </div>
