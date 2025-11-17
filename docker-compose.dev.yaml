@@ -24,13 +24,13 @@ services:
       args:
         WWWGROUP: '${WWWGROUP:-1000}'
         WWWUSER: '${WWWUSER:-1000}'
-    user: '${WWWUSER:-1000}:${WWWGROUP:-1000}'
     env_file:
       - ./backend/.env
     ports:
       - "8000:80"
     volumes:
       - ./backend:/var/www/html
+      - /var/www/html/vendor
     depends_on:
       mysql:
         condition: service_healthy

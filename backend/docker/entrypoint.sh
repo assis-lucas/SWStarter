@@ -9,6 +9,8 @@ chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || 
 
 if [ -f /var/www/html/composer.json ] && [ ! -f /var/www/html/vendor/autoload.php ]; then
     echo "Installing composer dependencies..."
+    mkdir -p /var/www/html/vendor
+    chown -R www-data:www-data /var/www/html/vendor
     composer install --no-interaction --prefer-dist --optimize-autoloader
 fi
 
