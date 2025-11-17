@@ -54,35 +54,35 @@ const FilmDetails = () => {
   }
 
   return (
-    <div className="md:max-w-[780px] mx-auto space-y-6">
-      <Button className="flex items-center gap-2" variant="primary" onClick={() => navigate('/')}>
-        <ArrowLeftIcon className="w-5 h-5" />
+    <div className="md:max-w-[780px] mx-auto space-y-4 sm:space-y-6">
+      <Button className="flex items-center gap-2 text-sm sm:text-base" variant="primary" onClick={() => navigate('/')}>
+        <ArrowLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
         Back
       </Button>
 
       <Card>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{film.title}</h1>
-        <p className="text-lg text-gray-600 mb-6">Episode {film.episode_id}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{film.title}</h1>
+        <p className="text-base sm:text-lg text-gray-600 mb-6">Episode {film.episode_id}</p>
 
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-3">Opening Crawl</h2>
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3">Opening Crawl</h2>
           <p className="text-gray-700 leading-relaxed italic">{film.opening_crawl}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Film Information</h2>
-            <dl className="space-y-2">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Film Information</h2>
+            <dl className="space-y-2 text-sm sm:text-base">
               <div className="flex">
-                <dt className="font-medium text-gray-600 w-32">Director:</dt>
+                <dt className="font-medium text-gray-600 w-24 sm:w-32">Director:</dt>
                 <dd className="text-gray-900">{film.director}</dd>
               </div>
               <div className="flex">
-                <dt className="font-medium text-gray-600 w-32">Producer:</dt>
+                <dt className="font-medium text-gray-600 w-24 sm:w-32">Producer:</dt>
                 <dd className="text-gray-900">{film.producer}</dd>
               </div>
               <div className="flex">
-                <dt className="font-medium text-gray-600 w-32">Release Date:</dt>
+                <dt className="font-medium text-gray-600 w-24 sm:w-32">Release Date:</dt>
                 <dd className="text-gray-900">{formatDate(film.release_date)}</dd>
               </div>
             </dl>

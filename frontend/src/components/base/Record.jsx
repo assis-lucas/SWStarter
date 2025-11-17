@@ -4,17 +4,17 @@ import { formatDate } from '../../utils/format';
 
 const Record = ({ item, searchType, onViewDetails, viewMode }) => {
   return (
-    <div className="border border-gray-300 rounded-lg p-4 hover:shadow-md transition-shadow">
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold text-gray-900 line-clamp-1">
+    <div className="border border-gray-300 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
+      <div className="flex flex-col gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 line-clamp-1">
             {searchType === 'people' ? item.name : item.title}
           </h3>
           {viewMode === 'detailed' && (
             <Button
               onClick={() => onViewDetails(item.id)}
               variant="primary"
-              className="w-auto"
+              className="w-full sm:w-auto text-xs sm:text-sm"
             >
               SEE DETAILS
             </Button>
@@ -38,7 +38,7 @@ const Record = ({ item, searchType, onViewDetails, viewMode }) => {
           <Button
             onClick={() => onViewDetails(item.id)}
             variant="primary"
-            className="w-auto"
+            className="w-full text-xs sm:text-sm"
           >
             SEE DETAILS
           </Button>

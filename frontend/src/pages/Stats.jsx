@@ -74,13 +74,13 @@ const Stats = () => {
   const performanceTotal = stats.query_performance.fast + stats.query_performance.medium + stats.query_performance.slow;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Database Statistics</h1>
-        <p className="text-gray-600">Real-time insights into your application performance</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Database Statistics</h1>
+        <p className="text-sm sm:text-base text-gray-600">Real-time insights into your application performance</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Total Queries"
           value={stats.summary.total_queries.toLocaleString()}
@@ -111,9 +111,9 @@ const Stats = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         <Card>
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Query Performance Distribution</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Query Performance Distribution</h2>
           <div className="space-y-4">
             <div>
               <div className="flex justify-between mb-1">
@@ -155,8 +155,8 @@ const Stats = () => {
         </Card>
 
         <Card>
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Activity by Hour</h2>
-          <div className="flex items-end justify-between h-48 gap-1">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Activity by Hour</h2>
+          <div className="flex items-end justify-between h-32 sm:h-48 gap-1">
             {stats.popular_hours.map((hour) => (
               <div key={hour.hour} className="flex-1 flex flex-col items-center justify-end">
                 <div
@@ -176,24 +176,24 @@ const Stats = () => {
       </div>
 
       <Card>
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Top 10 Most Frequent Queries</h2>
-        <div className="overflow-x-auto">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Top 10 Most Frequent Queries</h2>
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">#</th>
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700">Query</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Count</th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700">Avg Time</th>
+                <th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-gray-700">#</th>
+                <th className="text-left py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-gray-700">Query</th>
+                <th className="text-right py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-gray-700">Count</th>
+                <th className="text-right py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-gray-700">Avg Time</th>
               </tr>
             </thead>
             <tbody>
               {stats.top_queries.map((query, index) => (
                 <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-3 px-4 text-sm text-gray-500">{index + 1}</td>
-                  <td className="py-3 px-4 text-sm text-gray-900 font-mono text-xs">{query.sql}</td>
-                  <td className="py-3 px-4 text-sm text-gray-900 text-right font-semibold">{query.total}</td>
-                  <td className="py-3 px-4 text-sm text-right">
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm text-gray-500">{index + 1}</td>
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs font-mono max-w-[150px] sm:max-w-none truncate sm:text-gray-900">{query.sql}</td>
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm text-gray-900 text-right font-semibold">{query.total}</td>
+                  <td className="py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm text-right">
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                       query.avg_time < 50 ? 'bg-green-100 text-green-800' :
                       query.avg_time < 200 ? 'bg-yellow-100 text-yellow-800' :
@@ -210,17 +210,17 @@ const Stats = () => {
       </Card>
 
       <Card>
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Slowest Queries</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Slowest Queries</h2>
         <div className="space-y-3">
           {stats.slowest_queries.map((query, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-              <div className="flex justify-between items-start mb-2">
-                <code className="text-xs font-mono text-gray-700 flex-1">{query.sql}</code>
-                <span className="ml-4 px-3 py-1 bg-red-100 text-red-800 text-sm font-semibold rounded-full whitespace-nowrap">
+            <div key={index} className="border border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow">
+              <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
+                <code className="text-xs font-mono text-gray-700 flex-1 break-all">{query.sql}</code>
+                <span className="px-2 sm:px-3 py-1 bg-red-100 text-red-800 text-xs sm:text-sm font-semibold rounded-full whitespace-nowrap">
                   {query.max_time}ms
                 </span>
               </div>
-              <p className="text-sm text-gray-500">Executed {query.count} times</p>
+              <p className="text-xs sm:text-sm text-gray-500">Executed {query.count} times</p>
             </div>
           ))}
         </div>
@@ -228,14 +228,14 @@ const Stats = () => {
 
       {stats.recent_activity && stats.recent_activity.length > 0 && (
         <Card>
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Activity Last 7 Days</h2>
-          <div className="grid grid-cols-7 gap-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Activity Last 7 Days</h2>
+          <div className="grid grid-cols-7 gap-1 sm:gap-2">
             {stats.recent_activity.map((day) => (
               <div key={day.date} className="text-center">
-                <div className="text-xs text-gray-500 mb-1">{new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
-                <div className="bg-primary-100 rounded-lg py-3 px-2">
-                  <div className="text-lg font-bold text-primary-900">{day.total}</div>
-                  <div className="text-xs text-primary-700">queries</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 mb-1">{new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                <div className="bg-primary-100 rounded-lg py-2 sm:py-3 px-1 sm:px-2">
+                  <div className="text-sm sm:text-lg font-bold text-primary-900">{day.total}</div>
+                  <div className="text-[10px] sm:text-xs text-primary-700">queries</div>
                 </div>
               </div>
             ))}

@@ -64,8 +64,8 @@ const Search = () => {
   };
 
   return (
-    <div className="flex items-start justify-center gap-6">
-      <Card className="sm:w-[410px] space-y-4">
+    <div className="flex flex-col lg:flex-row items-start justify-center gap-4 lg:gap-6">
+      <Card className="w-full lg:w-[410px] space-y-4">
         <h2 className="text-sm font-semibold text-gray-800">What are you searching for?</h2>
 
         <div className="flex items-center gap-4">
@@ -99,9 +99,9 @@ const Search = () => {
         </form>
       </Card>
 
-      <Card className="sm:w-[580px] flex flex-col">
+      <Card className="w-full lg:w-[580px] flex flex-col">
         <div className="flex justify-between items-center mb-4 border-b pb-4 border-gray-300">
-          <h2 className="text-xl font-bold text-gray-800">Results</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800">Results</h2>
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode('detailed')}
@@ -111,7 +111,7 @@ const Search = () => {
                 }`}
               title="Detailed view"
             >
-              <Bars3Icon className="w-5 h-5" />
+              <Bars3Icon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button
               onClick={() => setViewMode('grid')}
@@ -121,7 +121,7 @@ const Search = () => {
                 }`}
               title="Grid view"
             >
-              <Squares2X2Icon className="w-5 h-5" />
+              <Squares2X2Icon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
@@ -130,11 +130,11 @@ const Search = () => {
           <Loading />
         ) : results.length === 0 ? (
           <EmptyState>
-            <h2 className="font-bold">There are zero matches. <br /> Use the form to search for People or Movies.</h2>
+            <h2 className="font-bold text-sm sm:text-base">There are zero matches. <br /> Use the form to search for People or Movies.</h2>
           </EmptyState>
         ) : (
           <div className="space-y-4">
-            <div className={viewMode === 'grid' ? 'grid grid-cols-2 gap-4' : 'space-y-4'}>
+            <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 gap-4' : 'space-y-4'}>
               {results.map((item) => (
                 <Record
                   key={item.id}
