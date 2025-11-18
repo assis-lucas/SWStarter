@@ -11,7 +11,11 @@ if [ -f /var/www/html/composer.json ] && [ ! -f /var/www/html/vendor/autoload.ph
     echo "Installing composer dependencies..."
     mkdir -p /var/www/html/vendor
     chown -R www-data:www-data /var/www/html/vendor
-    composer install --no-interaction --prefer-dist --optimize-autoloader
+    composer install --no-interaction --prefer-dist --optimize-autoloader || {
+        echo "Composer install failed, cleaning up..."
+        rm -rf /var/www/html/vendor/*
+        exit 1
+    }
 fi
 
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

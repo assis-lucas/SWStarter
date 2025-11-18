@@ -85,14 +85,26 @@ function setup_app() {
     docker compose -f $DEV_COMPOSE up -d
     print_success "Containers started"
     
-    # Wait for MySQL to be ready
-    print_info "Waiting for MySQL to be ready..."
-    sleep 5
+    # Wait for MySQL to be ready and for composer install to complete
+    print_info "Waiting for services to be ready..."
+    sleep 10
     
-    # Install composer dependencies
-    print_info "Installing composer dependencies..."
-    docker compose -f $DEV_COMPOSE exec backend composer install
-    print_success "Composer dependencies installed"
+    # Wait for composer dependencies to be installed by entrypoint
+    max_retries=30
+    retry_count=0
+    while [ $retry_count -lt $max_retries ]; do
+        if docker compose -f $DEV_COMPOSE exec backend test -f /var/www/html/vendor/autoload.php 2>/dev/null; then
+            print_success "Composer dependencies ready"
+            break
+        fi
+        retry_count=$((retry_count + 1))
+        if [ $retry_count -eq $max_retries ]; then
+            print_error "Composer dependencies installation timed out"
+            print_info "Check logs with: docker compose -f $DEV_COMPOSE logs backend"
+            exit 1
+        fi
+        sleep 2
+    done
     
     # Generate app key
     print_info "Generating application key..."

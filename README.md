@@ -9,7 +9,7 @@ A full-stack starter template with Laravel backend and React frontend, fully con
 ### Automated Setup (Recommended)
 
 ```bash
-./sw setup
+chmod +x ./sw && ./sw setup
 ```
 
 This will:
